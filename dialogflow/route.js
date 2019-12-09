@@ -25,18 +25,21 @@ app.intent("test", async (conv, params) => {
 
 //sign in intents
 // Intent that starts the account linking flow.
+
 // app.intent("ask_for_sign_in_detail", conv => {
 //   conv.ask(new SignIn());
 // });
+
 // Create a Dialogflow intent with the `actions_intent_SIGN_IN` event.
-app.intent("ask_for_sign_in_confirmation", (conv, params, signin) => {
-  if (signin.status !== "OK") {
-    return conv.ask("You need to sign in before using the app.");
-  }
-  // const access = conv.user.access.token;
-  // possibly do something with access token
-  return conv.ask("Great! Thanks for signing in.");
-});
+
+// app.intent("ask_for_sign_in_confirmation", (conv, params, signin) => {
+//   if (signin.status !== "OK") {
+//     return conv.ask("You need to sign in before using the app.");
+//   }
+//   // const access = conv.user.access.token;
+//   // possibly do something with access token
+//   return conv.ask("Great! Thanks for signing in.");
+// });
 
 router.post("/fulfillment", app); // this connects the express server with dialogflow through the /fulfillment endpoint
 
