@@ -25,9 +25,9 @@ app.intent("test", async (conv, params) => {
 
 //sign in intents
 // Intent that starts the account linking flow.
-app.intent("ask_for_sign_in_detail", conv => {
-  conv.ask(new SignIn());
-});
+// app.intent("ask_for_sign_in_detail", conv => {
+//   conv.ask(new SignIn());
+// });
 // Create a Dialogflow intent with the `actions_intent_SIGN_IN` event.
 app.intent("ask_for_sign_in_confirmation", (conv, params, signin) => {
   if (signin.status !== "OK") {
