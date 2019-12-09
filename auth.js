@@ -15,7 +15,8 @@ module.exports = passport => {
         clientID:
           "41211512517-64dvhdbbcruocksj6il55mefdkqvvcff.apps.googleusercontent.com",
         clientSecret: "UgJWiC0Lig7Gkp3LEYSsOvwp",
-        callbackURL: "http://localhost:4000/auth/google/callback"
+        callbackURL:
+          "https://rocky-beyond-35781.herokuapp.com/auth/google/callback"
       },
       (token, refreshToken, profile, done) => {
         return done(null, {
