@@ -8,7 +8,7 @@ router.get("/sendMail", async (request, response, next) => {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        // in order for this to work, the user MUST allow "Less secure app" on Google Account
+        // in order for this to work, the user MUST allow "Less secure app" AND disable two-step verification on Google Account
         user: "hoitinso@gmail.com", // gmail
         pass: "Sp20075111!" // password
       }

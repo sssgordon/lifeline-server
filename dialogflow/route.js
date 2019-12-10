@@ -1,5 +1,6 @@
 const { Router } = require("express");
-const { dialogflow, SignIn } = require("actions-on-google");
+const { dialogflow } = require("actions-on-google");
+const nodemailer = require("nodemailer");
 const User = require("../user/model");
 
 const router = new Router();
@@ -10,16 +11,38 @@ const app = dialogflow({
 });
 
 app.intent("test", async conv => {
-  // console.log("CONV TEST", conv);
-  // console.log("PARAMS TEST", params);
   // send test email to himself
-  // conv.ask(new SignIn("Please sign in"));
+  // let transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     // in order for this to work, the user MUST allow "Less secure app" AND disable two-step verification on Google Account
+  //     user: "hoitinso@gmail.com", // gmail
+  //     pass: "Sp20075111!" // password
+  //   }
+  // });
+
+  // let mailOptions = {
+  //   from: "hoitinso@gmail.com", // user gmail
+  //   to: "gso7@uwo.ca", // destination
+  //   // cc: "hoitinso@gmail.com", // other emails
+  //   subject: "Testing",
+  //   text: "It works."
+  // };
+
+  // transporter.sendMail(mailOptions, function(error, data) {
+  //   if (error) {
+  //     console.log("Error occured", error);
+  //   } else {
+  //     console.log("Email sent!");
+  //   }
+  // });
+
   conv.close("Testing is a success!");
 });
 
 app.intent("declaration", async (conv, { name }) => {
   try {
-    // use params to get user name to match with db
+    // use name param to  match with user in db
     const user = await User.findOne({ where: { alias: name } });
 
     if (user) {
@@ -28,6 +51,7 @@ app.intent("declaration", async (conv, { name }) => {
     } else {
       conv.ask("Try again?");
     }
+
     // send email
   } catch (error) {
     next(error);
