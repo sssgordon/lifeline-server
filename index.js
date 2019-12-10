@@ -17,6 +17,7 @@ const cookieSessionObj = cookieSession({
 });
 const dialogflowRouter = require("./dialogflow/route");
 const userRouter = require("./user/route");
+const emailRouter = require("./email/route");
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -29,6 +30,7 @@ auth(passport);
 app.use(passport.initialize());
 app.use(dialogflowRouter);
 app.use(userRouter);
+app.use(emailRouter);
 
 //authorization endpoint
 app.get(
