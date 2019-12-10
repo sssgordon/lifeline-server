@@ -24,7 +24,21 @@ router.post("/users", async (request, response, next) => {
   }
 });
 
-router.put("/users/:email", async (request, response, next) => {
+router.put("/users/:email/details", async (request, response, next) => {
+  try {
+    const user = await User.findOne({ where: { email: request.params.email } });
+    if (user) {
+      user.update(request.body);
+      response.send("User details updated");
+    } else {
+      response.status(404).end();
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/users/:email/alias", async (request, response, next) => {
   try {
     const user = await User.findOne({ where: { email: request.params.email } });
     if (user) {
