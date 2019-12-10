@@ -40,19 +40,80 @@ app.intent("test", async conv => {
   conv.close("Testing is a success!");
 });
 
-app.intent("declaration", async (conv, { name }) => {
+app.intent("declaration", async (conv, { name, location, police_station }) => {
   try {
     // use name param to  match with user in db
     const user = await User.findOne({ where: { alias: name } });
 
     if (user) {
-      const usergivenName = user.givenName;
-      conv.close(`Your lawyer is on the way, hang in there ${usergivenName}.`);
+      const {
+        email,
+        emailPassword,
+        givenName,
+        familyName,
+        lawyerEmail,
+        otherEmail,
+        hkIdNumber,
+        gender,
+        address,
+        dateOfBirth,
+        phoneNumber,
+        emergencyContact,
+        emergencyContactNumber
+      } = user;
+      const arrestedLocation = location ? location : null;
+      const policeStation = police_station ? police_station : null;
+
+      // send email
+      let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          // in order for this to work, the user MUST allow "Less secure app" AND disable two-step verification on Google Account
+          user: email, // gmail
+          pass: emailPassword // password
+        }
+      });
+
+      let mailOptions = {
+        from: email, // user gmail
+        to: lawyerEmail, // destination
+        cc: otherEmail, // other emails
+        subject: `${givenName} is arrested`,
+        text: `Dear lawyer,
+
+        ${givenName} ${familyName} (${hkIdNumber}) has been arrested and now requires your legal service.
+
+        ---Information regarding the incident---
+        Arrested location: ${arrestedLocation}
+        Police station: ${policeStation}
+
+        ---Litigant information---
+        Gender: ${gender}
+        Date of birth: ${dateOfBirth}
+        Home address: ${address}
+        Phone number: ${phoneNumber}
+        Emergency contact: ${emergencyContact}
+        Emergency contact number: ${emergencyContactNumber}
+
+        *Information regarding the incident is not fact-checked.
+
+        Yours faithfully,
+        Outcry staff
+        `
+      };
+
+      transporter.sendMail(mailOptions, function(error, data) {
+        if (error) {
+          console.log("Error occured", error);
+        } else {
+          console.log("Email sent!");
+        }
+      });
+
+      conv.close(`Your lawyer is on the way, hang in there ${givenName}.`);
     } else {
       conv.ask("Try again?");
     }
-
-    // send email
   } catch (error) {
     next(error);
   }
