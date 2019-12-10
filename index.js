@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const corsMiddleware = cors();
+const corsMiddleware = cors({
+  credentials: true,
+  origin: "http://localhost:3000" // this allows frontend to access backend
+});
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const passport = require("passport");
@@ -56,6 +59,7 @@ app.get("/", (req, res) => {
   if (req.session.token) {
     res.cookie("token", req.session.token);
     res.json({
+      // token: req.session.token
       status: "session cookie set"
     });
   } else {

@@ -16,12 +16,13 @@ app.intent("test", async (conv, params) => {
   conv.close("Testing is a success!");
 });
 
-// app.intent("declaration", async conv => {
-//   // find user in db with google account stuff
-//   // send email
-//   // get user name
-//   conv.close(`Your lawyer is on the way, hang in there.`);
-// });
+app.intent("declaration", async conv => {
+  // use params to get user name to match with db
+  // find user in db
+  // send email
+  // get user name
+  conv.close(`Your lawyer is on the way, hang in there.`);
+});
 
 //sign in intents
 // Intent that starts the account linking flow.
