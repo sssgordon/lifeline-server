@@ -32,9 +32,9 @@ app.get(
   "/auth/google",
   passport.authenticate("google", {
     scope: [
-      // "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email"
-      // "https://www.googleapis.com/auth/dialogflow"
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/dialogflow"
     ]
   })
 );
@@ -52,6 +52,7 @@ app.get(
 
 //redirect to this page after login, with token in frontend
 app.get("/", (req, res) => {
+  console.log("token test", req.session.token);
   if (req.session.token) {
     res.cookie("token", req.session.token);
     res.json({
@@ -72,3 +73,5 @@ app.get("/logout", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+// heroku link: https://rocky-beyond-35781.herokuapp.com/

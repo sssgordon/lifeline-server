@@ -12,15 +12,15 @@ app.intent("test", async (conv, params) => {
   // console.log("CONV TEST", conv);
   // console.log("PARAMS TEST", params);
   // send test email to himself
-  conv.ask(new SignIn("Please sign in"));
-  // conv.close("Testing is a success!");
+  // conv.ask(new SignIn("Please sign in"));
+  conv.close("Testing is a success!");
 });
 
 // app.intent("declaration", async conv => {
 //   // find user in db with google account stuff
 //   // send email
 //   // get user name
-//   conv.close(`Your lawyer is on the way, hang in there ${name}.`);
+//   conv.close(`Your lawyer is on the way, hang in there.`);
 // });
 
 //sign in intents
