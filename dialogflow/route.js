@@ -42,7 +42,6 @@ app.intent("test", async conv => {
 
 app.intent("declaration", async (conv, { name, location, police_station }) => {
   try {
-    // use name param to  match with user in db
     const user = await User.findOne({ where: { alias: name } });
 
     if (user) {
@@ -61,8 +60,8 @@ app.intent("declaration", async (conv, { name, location, police_station }) => {
         emergencyContact,
         emergencyContactNumber
       } = user;
-      const arrestedLocation = location ? location : null;
-      const policeStation = police_station ? police_station : null;
+      const arrestedLocation = location ? location : "unkonwn";
+      const policeStation = police_station ? police_station : "uknown";
 
       // send email
       let transporter = nodemailer.createTransport({
@@ -70,18 +69,19 @@ app.intent("declaration", async (conv, { name, location, police_station }) => {
         auth: {
           // in order for this to work, the user MUST allow "Less secure app" AND disable two-step verification on Google Account
           user: email, // gmail
-          pass: emailPassword // password
+          pass: emailPassword // gmail password
         }
       });
 
       let mailOptions = {
-        from: email, // user gmail
-        to: lawyerEmail, // destination
-        cc: otherEmail, // other emails
+        from: email,
+        to: lawyerEmail,
+        cc: otherEmail,
         subject: `${givenName} is arrested`,
-        text: `Dear lawyer,
+        text: `
+        Dear lawyer,
 
-        ${givenName} ${familyName} (${hkIdNumber}) has been arrested and now requires your legal service.
+        ${givenName} ${familyName} ${hkIdNumber} has been arrested and now needs your legal service.
 
         ---Information regarding the incident---
         Arrested location: ${arrestedLocation}
@@ -118,24 +118,6 @@ app.intent("declaration", async (conv, { name, location, police_station }) => {
     next(error);
   }
 });
-
-//sign in intents
-// Intent that starts the account linking flow.
-
-// app.intent("ask_for_sign_in_detail", conv => {
-//   conv.ask(new SignIn());
-// });
-
-// Create a Dialogflow intent with the `actions_intent_SIGN_IN` event.
-
-// app.intent("ask_for_sign_in_confirmation", (conv, params, signin) => {
-//   if (signin.status !== "OK") {
-//     return conv.ask("You need to sign in before using the app.");
-//   }
-//   // const access = conv.user.access.token;
-//   // possibly do something with access token
-//   return conv.ask("Great! Thanks for signing in.");
-// });
 
 router.post("/fulfillment", app); // this connects the express server with dialogflow through the /fulfillment endpoint
 
